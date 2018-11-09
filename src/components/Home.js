@@ -5,12 +5,12 @@ import { fetchData } from '../store'
 class Home extends React.Component {
   componentDidMount() {
     if ( this.props.circuits.length <= 0 ) {
-      this.props.fetchData();
+      this.props.fetchData()
     }
   }
 
   render() {
-    const { circuits } = this.props;
+    const { circuits } = this.props
 
     return (
       <div>
@@ -21,17 +21,17 @@ class Home extends React.Component {
           )) }
         </ul>
       </div>
-    );
+    )
   }
 }
-Home.serverFetch = fetchData; // static declaration of data requirements
+Home.serverFetch = fetchData // static declaration of data requirements
 
 const mapStateToProps = (state) => ( {
   circuits: state.data
-});
+})
 
 const mapDispatchToProps = {
   fetchData
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
