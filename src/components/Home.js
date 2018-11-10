@@ -1,37 +1,41 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { fetchData } from '../store'
+import { inject, observer } from 'mobx-react'
 
+@inject('stores')
+@observer
 class Home extends React.Component {
-  componentDidMount() {
-    if ( this.props.circuits.length <= 0 ) {
-      this.props.fetchData()
-    }
-  }
+
 
   render() {
-    const { circuits } = this.props
+    const { event } = this.props.stores
 
     return (
       <div>
-        <h2>F1 2018 Season Calendar</h2>
-        <ul>
-          { circuits.map(({ circuitId, circuitName, Location }) => (
-            <li key={ circuitId } >{ circuitName } - { Location.locality }, { Location.country }</li>
-          )) }
-        </ul>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Savings</th>
+            </tr>
+          </thead>
+          <tbody>
+            {event.users && event.users.map(user => (
+              <UserRow user={user} key={user.phone} />
+            ))}
+          </tbody>
+        </table>
       </div>
     )
   }
 }
-Home.serverFetch = fetchData // static declaration of data requirements
 
-const mapStateToProps = (state) => ( {
-  circuits: state.data
-})
+export default Home
 
-const mapDispatchToProps = {
-  fetchData
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+const UserRow = ({user}) => (
+  <tr>
+    <td>{`${user.name.title} ${user.name.first} ${user.name.last}`}</td>
+    <td>{user.email}</td>
+    <td>{user.phone}</td>
+    <td><img src={user.picture.large} /></td>
+  </tr>
+)

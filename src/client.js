@@ -1,20 +1,22 @@
+import 'babel-core/register'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { Provider as ReduxProvider } from 'react-redux'
 
 import Layout from './components/Layout'
-import createStore from './store'
+import { Provider } from 'mobx-react'
 
-const store = createStore(window.REDUX_DATA)
+const stores = window.__INITIAL_STATE__
 
 const jsx = (
-  <ReduxProvider store={ store }>
+  <Provider stores={stores}>
     <Router>
       <Layout />
     </Router>
-  </ReduxProvider>
+  </Provider>
 )
+
 
 const app = document.getElementById('app')
 ReactDOM.hydrate(jsx, app)

@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch'
 
-export function fetchCircuits() {
-  return fetch('http://ergast.com/api/f1/2018/circuits.json')
+export function fetchUsers() {
+  return fetch('https://randomuser.me/api/?results=5')
     .then(res => res.json())
-    .then(res => res.MRData.CircuitTable.Circuits)
+    .then(res => res.results)
 }

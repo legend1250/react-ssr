@@ -8,29 +8,30 @@
     "dev": "npm-run-all --parallel server client",
     "server": "nodemon index.js",
     "client": "webpack --watch --progress",
-    "linter": "eslint src",
-    "linter-fix": "eslint src --fix",
+    "linter": "eslint .",
+    "linter-fix": "eslint . --fix",
     "bundlesize": "bundlesize",
-    "precommit": "eslint src --quiet"
+    "precommit": "eslint . --quiet"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
+    "mobx": "4.6.0",
+    "mobx-react": "^5.3.6",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-helmet": "^5.2.0",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.3.13",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
     "babel-register": "^6.26.0",
     "bundlesize": "^0.17.0",
     "enzyme": "^3.7.0",
@@ -61,7 +62,7 @@
   },
   "lint-staged": {
     "*.{js,json}": [
-      "eslint src --fix",
+      "eslint . --fix",
       "git add"
     ]
   },
