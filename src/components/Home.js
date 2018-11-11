@@ -1,21 +1,36 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
+import { Helmet } from 'react-helmet'
 
 @inject('stores')
 @observer
 class Home extends React.Component {
 
+  componentDidMount = () => {
+    // console.log('stores: ' ,this.props.stores)
+  }
+
+  handleMoreUsers = () => {
+    this.props.stores.event.getMoreUsers()
+  }
 
   render() {
     const { event } = this.props.stores
 
     return (
       <div>
+        <Helmet>
+          <title>React SSR</title>
+          <meta name="description" content="This is a proof of concept for React SSR" />
+        </Helmet>
+        <button onClick={this.handleMoreUsers} >More users</button>
         <table border="1">
           <thead>
             <tr>
-              <th>Month</th>
-              <th>Savings</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Picture</th>
             </tr>
           </thead>
           <tbody>

@@ -3,49 +3,45 @@ import path from 'path'
 
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { StaticRouter, matchPath } from 'react-router-dom'
-// import { Provider } from 'mobx-react'
+import { StaticRouter } from 'react-router-dom'
+import { parse } from 'url'
 import Helmet from 'react-helmet'
-import routes from './routes'
 import Layout from './components/Layout'
 import { Provider } from 'mobx-react'
 import { Event } from './store'
-import { fetchUsers } from './api'
+import { fetchUsers, getEvents } from './api'
 
 const app = express()
 
 app.use(express.static(path.resolve(__dirname, '../dist')))
 
-app.get('/*', (req, res) => {
+app.get('/*', async (req, res) => {
+  const parsedUrl = parse(req.url, true)
+  const { pathname, query } = parsedUrl
+  console.log('query: ' ,pathname, query)
+
   const context = { }
+  const users = await fetchUsers()
+  const events = await getEvents({limit: 10})
+  console.log('events: ' ,events)
 
-  const dataRequirements =
-        routes
-          .filter(route => matchPath(req.url, route)) // filter matching paths
-          .map(route => route.component) // map to components
+  const stores = {
+    event: new Event(users)
+  }
+  
+  const jsx = (
+    <Provider stores={stores}>
+      <StaticRouter context={ context } location={ req.url }>
+        <Layout />
+      </StaticRouter>
+    </Provider>
+  )
+  const reactDom = renderToString(jsx)
+  const helmetData = Helmet.renderStatic()
 
-  fetchUsers().then( result => {
-    const stores = {
-      event: new Event(result)
-    }
-    
-    const jsx = (
-      <Provider stores={stores}>
-        <StaticRouter context={ context } location={ req.url }>
-          <Layout />
-        </StaticRouter>
-      </Provider>
-    )
-    const reactDom = renderToString(jsx)
-    const helmetData = Helmet.renderStatic()
+  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.end(htmlTemplate(reactDom, stores, helmetData))
 
-    res.writeHead(200, { 'Content-Type': 'text/html' })
-    res.end(htmlTemplate(reactDom, stores, helmetData))
-  })
-
-  Promise.all(dataRequirements).then(() => {
-    
-  })
 })
 
 app.listen(2048)
@@ -59,12 +55,13 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
             ${ helmetData.title.toString() }
             ${ helmetData.meta.toString() }
             <title>React SSR</title>
+            <link rel="shortcut icon" href="/static/favicon.ico">
         </head>
         
         <body>
             <div id="app">${ reactDom }</div>
             <script>
-              window.__INITIAL_STATE__ = ${ JSON.stringify(mobxStores) };
+              window.__INITIAL_STATE_EVENT__ = ${ JSON.stringify(mobxStores) };
             </script>
             <script src="./app.bundle.js"></script>
         </body>

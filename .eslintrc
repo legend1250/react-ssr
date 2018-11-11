@@ -32,6 +32,10 @@
     "function-paren-newline": ["error", "never"],
     "indent": [2, 2, {"SwitchCase": 1}],
     "quotes": ["error", "single"],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "node/no-deprecated-api": ["error", {
+      "ignoreModuleItems": ["url.parse"],
+      "ignoreGlobalItems": []
+  }]
   }
 }

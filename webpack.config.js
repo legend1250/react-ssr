@@ -41,10 +41,19 @@ module.exports = {
             plugins:  [
               'transform-decorators-legacy',
               'transform-class-properties',
-              'transform-object-rest-spread'
+              'transform-object-rest-spread',
+              'transform-async-to-generator'
             ]
           }
         }
+      },
+      {
+        test: /\.(png|jpg|jpeg|svg)$/,
+        use: 'file-loader?name=[hash:base64:7].[ext]'
+      },
+      {
+        test: /favicon\.png$/,
+        use: 'file-loader?name=[name].[ext]'
       }
     ]
   },
