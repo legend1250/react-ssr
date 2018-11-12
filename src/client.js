@@ -4,16 +4,14 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
-
 import Layout from './components/Layout'
 import { Provider } from 'mobx-react'
-import { Event } from './store'
-
-
-const { event } = window.__INITIAL_STATE_EVENT__
+import { Event, Network } from './store'
+const { event, network } = window.__INITIAL_STATE__
 
 const stores = {
-  event: new Event(event.users)
+  event: new Event(event.events, event.event),
+  network: new Network(network.requestError)
 }
 
 const jsx = (

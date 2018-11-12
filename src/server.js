@@ -8,27 +8,42 @@ import { parse } from 'url'
 import Helmet from 'react-helmet'
 import Layout from './components/Layout'
 import { Provider } from 'mobx-react'
-import { Event } from './store'
-import { fetchUsers, getEvents } from './api'
+import { Event, Network } from './store'
+import { getEvents, getEventById } from './api'
 
 const app = express()
 
-app.use(express.static(path.resolve(__dirname, '../dist')))
+app.use('/static', express.static(path.resolve(__dirname, '../dist')))
 
 app.get('/*', async (req, res) => {
   const parsedUrl = parse(req.url, true)
-  const { pathname, query } = parsedUrl
-  console.log('query: ' ,pathname, query)
+  const { pathname } = parsedUrl
+  const context = { redirect: true }
 
-  const context = { }
-  const users = await fetchUsers()
-  const events = await getEvents({limit: 10})
-  console.log('events: ' ,events)
+  const { data: { events } } = await getEvents({limit: 10})
 
-  const stores = {
-    event: new Event(users)
+  let stores = {
+    event: new Event(events),
+    network: new Network()
   }
-  
+
+  if(pathname.startsWith('/event')){
+    const id = pathname.split('-').pop()
+    const  { data: { event } } = await getEventById({id})
+    if(!event){
+      stores = {
+        ...stores,
+        network: new Network({code: 404, url: '/notfound'})
+      }
+    }
+    else{
+      stores = {
+        ...stores,
+        event: new Event(events, event)
+      }
+    }
+  }
+
   const jsx = (
     <Provider stores={stores}>
       <StaticRouter context={ context } location={ req.url }>
@@ -61,9 +76,9 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
         <body>
             <div id="app">${ reactDom }</div>
             <script>
-              window.__INITIAL_STATE_EVENT__ = ${ JSON.stringify(mobxStores) };
+              window.__INITIAL_STATE__ = ${ JSON.stringify( mobxStores ) };
             </script>
-            <script src="./app.bundle.js"></script>
+            <script src="/static/app.bundle.js"></script>
         </body>
         </html>
     `

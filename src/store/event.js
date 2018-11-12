@@ -1,21 +1,18 @@
 import { observable, action } from 'mobx'
-import fetch from 'isomorphic-fetch'
 
 export default class Event {
 
   @observable loading = false
-  @observable users = []
+  @observable events = []
+  @observable event = {}
 
-  constructor(users) {
-    this.users = users
+  constructor(events = [], event = {}){
+    this.events = events
+    this.event = event
   }
 
-  @action getMoreUsers(){
-    fetch('https://randomuser.me/api/?results=5')
-      .then(res => res.json())
-      .then(res => {
-        this.users = res.results
-      })
+  @action getMoreEvents(){
+    
   }
   
 }

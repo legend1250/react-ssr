@@ -1,14 +1,7 @@
-import fetch from 'isomorphic-fetch'
 import { createApolloFetch } from 'apollo-fetch'
 
 const uri = 'http://localhost:5000/graphql'
 const apolloFetch = createApolloFetch({ uri })
-
-export function fetchUsers() {
-  return fetch('https://randomuser.me/api/?results=5')
-    .then(res => res.json())
-    .then(res => res.results)
-}
 
 export const getEvents = ({limit, cursor}) => {
   const query = `
@@ -35,17 +28,20 @@ export const getEvents = ({limit, cursor}) => {
   return apolloFetch({query, variables: {limit, cursor}})
 } 
 
-export const getEventById = `
-  query($id: ID!) {
-    event(id: $id) {
-      title
-      description
-      createdAt
-      user {
-        id
-        username
-        email
+export const getEventById = ({id}) => {
+  const query = `
+    query($id: ID!) {
+      event(id: $id) {
+        title
+        description
+        createdAt
+        user {
+          id
+          username
+          email
+        }
       }
     }
-  }
-`
+  `
+  return apolloFetch({query, variables: { id }})
+}
