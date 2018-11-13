@@ -1,13 +1,14 @@
-const dev = process.env.NODE_ENV !== 'production'
 const path = require( 'path' )
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { BundleAnalyzerPlugin } = require( 'webpack-bundle-analyzer' )
 const FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' )
+const devMode = process.env.NODE_ENV !== 'production'
 
 const plugins = [
   new FriendlyErrorsWebpackPlugin()
 ]
 
-if ( !dev ) {
+if ( !devMode ) {
   plugins.push( new BundleAnalyzerPlugin( {
     analyzerMode: 'static',
     reportFilename: 'webpack-report.html',
@@ -16,18 +17,7 @@ if ( !dev ) {
 }
 
 module.exports = {
-  mode: dev ? 'development' : 'production',
-  context: path.join( __dirname, 'src' ),
-  devtool: dev ? 'none' : 'source-map',
-  entry: {
-    app: './client.js'
-  },
-  resolve: {
-    modules: [
-      path.resolve( './src' ),
-      'node_modules'
-    ]
-  },
+  context: __dirname,
   module: {
     rules: [
       {
@@ -48,7 +38,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|jpg|jpeg|svg)$/,
+        test: /\.(png|jpg|jpeg|svg|ttf|eot|otf)$/,
         use: 'file-loader?name=[hash:base64:7].[ext]'
       },
       {
@@ -56,12 +46,24 @@ module.exports = {
         use: 'file-loader?name=[name].[ext]'
       },
       {
-        test: /\.scss$/,
-        use: [
-          'style-loader', // creates style nodes from JS strings
-          'css-loader', // translates CSS into CommonJS
-          'sass-loader' // compiles Sass to CSS, using Node Sass by default
-        ]
+        test: /\.(woff|woff2)$/,
+        loader: 'url-loader'
+      },
+      { 
+        test: /\.(sa|sc|c)ss$/, 
+        use: [ 
+          MiniCssExtractPlugin.loader, 
+          { 
+            loader: 'css-loader', 
+            options: { 
+              localIdentName: '[name]__[local]--[hash:base64:5]', 
+              minimize: { safe: true }
+            } 
+          }, 
+          { 
+            loader: 'sass-loader'
+          } 
+        ] 
       }
     ]
   },
@@ -69,5 +71,13 @@ module.exports = {
     path: path.resolve( __dirname, 'dist' ),
     filename: '[name].bundle.js'
   },
-  plugins
+  plugins: [
+    ...plugins,
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: devMode ? '[name].css' : '[name].[hash].css',
+      chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
+    })
+  ]
 }

@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react'
 class Page404 extends Component{
 
   componentDidMount = () => {
-    console.log('stores: ' ,this.props.stores)
     const { network } = this.props.stores
     network.requestError = null
   }

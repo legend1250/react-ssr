@@ -3,7 +3,8 @@ import { inject, observer } from 'mobx-react'
 import { Redirect } from 'react-router-dom'
 import { Editor as EditorWysiwyg } from 'react-draft-wysiwyg'
 import { convertFromRaw, EditorState } from 'draft-js'
-// import './styles.scss'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import './styles.scss'
 
 @inject('stores')
 @observer
@@ -22,7 +23,7 @@ class EventDetail extends Component {
   render() {
     const { requestError, event } = this.getEventDetail()
     if(requestError){
-      console.log('return 404')
+      // console.log('return 404')
       return (<Redirect to={requestError.url} />)
     }
 
@@ -31,7 +32,7 @@ class EventDetail extends Component {
       
 
     return (
-      <div style={{ borderBottom: '1px red solid', marginTop: 16 }}>
+      <div className='title-event-detail' >
         <h3>{event.userId}</h3>
         <div>
           <span>

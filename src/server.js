@@ -1,3 +1,5 @@
+import register from 'ignore-styles'
+
 import express from 'express'
 import path from 'path'
 
@@ -11,9 +13,20 @@ import { Provider } from 'mobx-react'
 import { Event, Network } from './store'
 import { getEvents, getEventById } from './api'
 
+import webpack from 'webpack'
+import configSSR from '../webpack.server'
+import webpackDevMiddleware from 'webpack-dev-middleware' 
+
+register(['.css', '.scss'])
+
 const app = express()
+const compiler = webpack(configSSR)
 
 app.use('/static', express.static(path.resolve(__dirname, '../dist')))
+app.use(webpackDevMiddleware(compiler,{
+  noInfo: true,
+  publicPath: configSSR.output.publicPath
+}))
 
 app.get('/*', async (req, res) => {
   const parsedUrl = parse(req.url, true)
@@ -71,6 +84,7 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
             ${ helmetData.meta.toString() }
             <title>React SSR</title>
             <link rel="shortcut icon" href="/static/favicon.ico">
+            <link rel="stylesheet" href="/static/main.9e751774ee482c215afd.css">
         </head>
         
         <body>
@@ -78,7 +92,7 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
             <script>
               window.__INITIAL_STATE__ = ${ JSON.stringify( mobxStores ) };
             </script>
-            <script src="/static/app.bundle.js"></script>
+            <script src="/static/main.bundle.js"></script>
         </body>
         </html>
     `
