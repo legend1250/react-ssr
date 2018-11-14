@@ -84,6 +84,7 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
             ${ helmetData.meta.toString() }
             <title>React SSR</title>
             <link rel="shortcut icon" href="/static/favicon.ico">
+            <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
             <link rel="stylesheet" href="/static/main.929a0524d7248582ba22.css">
         </head>
         
