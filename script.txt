@@ -1,0 +1,4 @@
+"build": "NODE_ENV=production webpack --config --progress",
+"dev": "npm-run-all --parallel server client",
+"server": "cross-env NODE_ENV=development nodemon index.js",
+"client": "webpack --config ./webpack.client.js --watch --progress",
