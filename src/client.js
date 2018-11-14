@@ -1,20 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Provider as ReduxProvider } from "react-redux";
+import 'babel-core/register'
+import 'babel-polyfill'
 
-import Layout from "./components/Layout";
-import createStore from "./store";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
+import Layout from './components/Layout'
+import { Provider } from 'mobx-react'
+import { Event, Network } from './store'
+const { event, network } = window.__INITIAL_STATE__
 
-const store = createStore( window.REDUX_DATA );
+const stores = {
+  event: new Event(event.events, event.event),
+  network: new Network(network.requestError)
+}
 
 const jsx = (
-    <ReduxProvider store={ store }>
-        <Router>
-            <Layout />
-        </Router>
-    </ReduxProvider>
-);
+  <Provider stores={stores}>
+    <Router>
+      <Layout />
+    </Router>
+  </Provider>
+)
 
-const app = document.getElementById( "app" );
-ReactDOM.hydrate( jsx, app );
+
+const app = document.getElementById('app')
+ReactDOM.hydrate(jsx, app)
