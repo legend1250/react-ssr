@@ -1,7 +1,10 @@
 import register from 'ignore-styles'
 
+import 'dotenv/config'
+
 import express from 'express'
 import path from 'path'
+import morgan from 'morgan'
 
 import React from 'react'
 import { renderToString } from 'react-dom/server'
@@ -22,7 +25,14 @@ register(['.css', '.scss'])
 const app = express()
 const compiler = webpack(configSSR)
 
+// morgan logging
+morgan.token('decodeUrl', function (req, res) {
+  return decodeURI(req.originalUrl)
+})
+
+
 app.use('/static', express.static(path.resolve(__dirname, '../dist')))
+app.use(morgan('- :method :decodeUrl :status :response-time ms'))
 app.use(webpackDevMiddleware(compiler,{
   noInfo: true,
   publicPath: configSSR.output.publicPath
@@ -32,6 +42,8 @@ app.get('/*', async (req, res) => {
   const parsedUrl = parse(req.url, true)
   const { pathname } = parsedUrl
   const context = { redirect: true }
+
+  app.get('/favicon.ico', (req, res) => res.status(204))
 
   const { data: { events } } = await getEvents({limit: 10})
 

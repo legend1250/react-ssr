@@ -6,7 +6,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config ./webpack.client.js --progress",
     "dev": "npm-run-all --parallel server client",
-    "server": "cross-env NODE_ENV=development nodemon index.js",
+    "server": "nodemon index.js",
     "client": "webpack --config ./webpack.client.js --watch --progress",
     "linter": "eslint .",
     "linter-fix": "eslint . --fix",
@@ -15,10 +15,12 @@
   },
   "dependencies": {
     "apollo-fetch": "^0.7.0",
+    "dotenv": "^6.1.0",
     "draft-js": "^0.10.5",
     "isomorphic-fetch": "^2.2.1",
     "mobx": "4.6.0",
     "mobx-react": "^5.3.6",
+    "morgan": "^1.9.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-draft-wysiwyg": "^1.12.13",
@@ -84,6 +86,12 @@
       "eslint . --fix",
       "git add"
     ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "dist/*"
+    ],
+    "delay": "2500"
   },
   "browserslist": [
     "> 1%",

@@ -1,6 +1,9 @@
 import { createApolloFetch } from 'apollo-fetch'
 
-const uri = 'http://localhost:5000/graphql'
+const prodMod = process.env.NODE_ENV === 'production'
+
+const uri = prodMod ? process.env.GRAPHQL_SERVER : 'http://localhost:5000/graphql'
+
 const apolloFetch = createApolloFetch({ uri })
 
 export const getEvents = ({limit, cursor}) => {
