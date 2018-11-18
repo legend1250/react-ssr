@@ -8,6 +8,7 @@
     "dev": "npm-run-all --parallel server client",
     "server": "nodemon index.js",
     "client": "webpack --config ./webpack.client.js --watch --progress",
+    "prod": "pm2-docker start --interpreter babel-node index.js",
     "linter": "eslint .",
     "linter-fix": "eslint . --fix",
     "bundlesize": "bundlesize",
