@@ -9,8 +9,8 @@ class Home extends React.Component {
     return (
       <div>
         <Helmet>
-          <title>React SSR</title>
-          <meta name="description" content="This is a proof of concept for React SSR" />
+          <title>EventBox</title>
+          <meta name="description" content="EventBox" />
         </Helmet>
         <EventList />
       </div>

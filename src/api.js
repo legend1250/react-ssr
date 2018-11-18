@@ -1,8 +1,8 @@
 import { createApolloFetch } from 'apollo-fetch'
 
-const prodMod = process.env.NODE_ENV === 'production'
+const uri = process.env.GRAPHQL_SERVER
 
-const uri = prodMod ? process.env.GRAPHQL_SERVER : 'http://localhost:8000/graphql'
+console.log('process: ' ,process.env.NODE_ENV)
 
 const apolloFetch = createApolloFetch({ uri })
 

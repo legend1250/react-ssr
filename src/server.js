@@ -43,7 +43,11 @@ app.get('/*', async (req, res) => {
   const { pathname } = parsedUrl
   const context = { redirect: true }
 
-  app.get('/favicon.ico', (req, res) => res.status(204))
+  // console.log('pathname: ', pathname)
+
+  if(pathname.includes('favicon.ico')){
+    return res.status(204).end()
+  }
 
   const { data: { events } } = await getEvents({limit: 10})
 
@@ -94,7 +98,7 @@ function htmlTemplate(reactDom, mobxStores, helmetData) {
             <meta charset="utf-8">
             ${ helmetData.title.toString() }
             ${ helmetData.meta.toString() }
-            <title>React SSR</title>
+            <title>EventBox</title>
             <link rel="shortcut icon" href="/static/favicon.ico">
             <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css">
             <link rel="stylesheet" href="/static/main.css">
