@@ -18,4 +18,4 @@ RUN npm install -g babel-cli
 ## Add application code
 COPY [".", "/app/"]
 
-WORKDIR /app
+CMD [ "npm" "run" "prod" ]
