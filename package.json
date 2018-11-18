@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config ./webpack.client.js --progress",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.clientprod.js --progress",
     "dev": "npm-run-all --parallel server client",
     "server": "nodemon index.js",
     "client": "webpack --config ./webpack.client.js --watch --progress",

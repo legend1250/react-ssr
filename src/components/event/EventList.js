@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Card, Icon, Image } from 'semantic-ui-react'
+import { Card, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 @inject('stores')
@@ -23,7 +23,7 @@ export default EventList
 
 const EventItem = ({event}) => (
   <Card>
-    <Image src='https://cdn.dribbble.com/users/788099/screenshots/5540413/girl_hair_dryer_2_kit8-net.png' />
+    {/* <Image src='https://cdn.dribbble.com/users/788099/screenshots/5540413/girl_hair_dryer_2_kit8-net.png' /> */}
     <Card.Content>
       <Card.Header>
         <Link to={`/event/${event.slug}-${event.id}`} target="_blank">
@@ -38,7 +38,7 @@ const EventItem = ({event}) => (
     <Card.Content extra>
       <a>
         <Icon name='user' />
-          22 Friends
+        {event.user.username}
       </a>
     </Card.Content>
   </Card>
