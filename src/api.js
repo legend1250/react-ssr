@@ -1,6 +1,9 @@
 import { createApolloFetch } from 'apollo-fetch'
 
-const uri = 'http://localhost:5000/graphql'
+const uri = process.env.GRAPHQL_SERVER
+
+console.log('uri: ' ,uri)
+
 const apolloFetch = createApolloFetch({ uri })
 
 export const getEvents = ({limit, cursor}) => {
@@ -12,6 +15,9 @@ export const getEvents = ({limit, cursor}) => {
           title
           slug
           description
+          images {
+            thumbnail
+          }
           createdAt
           user {
             id
