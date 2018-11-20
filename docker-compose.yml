@@ -1,0 +1,12 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image:
+      eventbox-home:v1
+    ports:
+      - 8080:2048
+    restart: always
+    command: npm run prod

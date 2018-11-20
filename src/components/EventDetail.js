@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import { Helmet } from 'react-helmet'
 import { Redirect } from 'react-router-dom'
 import { Editor as EditorWysiwyg } from 'react-draft-wysiwyg'
 import { convertFromRaw, EditorState } from 'draft-js'
@@ -33,6 +34,9 @@ class EventDetail extends Component {
 
     return (
       <div className='title-event-detail' >
+        <Helmet>
+          <title>{event.title}</title>
+        </Helmet>
         <h3>{event.userId}</h3>
         <div>
           <span>
